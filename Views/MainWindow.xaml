@@ -1,0 +1,128 @@
+﻿<Window x:Class="EventManagerJH.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:EventManagerJH.ViewModels"
+        xmlns:conv="clr-namespace:EventManagerJH.Converters"
+        Title="Evenementen Beheer Systeem" Height="500" Width="900">
+
+    <!-- Bind de ViewModel aan het venster -->
+    <Window.DataContext>
+        <vm:EvenementenViewModel/>
+    </Window.DataContext>
+
+    <!-- Voeg resources toe, inclusief de StringToVisibilityConverter -->
+    <Window.Resources>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+
+        <!-- Stijl voor knoppen -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <!-- Stijl voor tekstblokken -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Zoekveld zonder gebruik van PlaceholderText -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
+            <TextBlock Text="Zoeken:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <!-- Alternatieve placeholder implementatie -->
+            <Grid>
+                <TextBox Name="ZoekTextBox" Width="200" Text="{Binding ZoekTerm, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Text="Typ om te zoeken..." 
+                           Foreground="Gray" 
+                           VerticalAlignment="Center" 
+                           Margin="5,0,0,0"
+                           IsHitTestVisible="False"
+                           Visibility="{Binding Text, ElementName=ZoekTextBox, Converter={StaticResource StringToVisibilityConverter}}"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Lijst van gefilterde evenementen -->
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding GefilterdeEvenementenLijst}" 
+                 DisplayMemberPath="Titel" 
+                 SelectedItem="{Binding GeselecteerdEvenement, Mode=TwoWay}" 
+                 HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Top" 
+                 Margin="0,0,10,0" 
+                 Name="EvenementenListBox" />
+
+        <!-- Details van het geselecteerde evenement -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+            <TextBlock Text="Titel:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Titel}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Datum:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Datum, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Locatie:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Locatie}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding GeselecteerdEvenement.Beschrijving}" Margin="0,0,0,10"/>
+
+            <!-- ToDo-lijst -->
+            <TextBlock Text="ToDo-lijst:" FontWeight="Bold" Margin="10,0,0,10"/>
+            <ListBox ItemsSource="{Binding GeselecteerdEvenement.ToDoLijst}" DisplayMemberPath="Beschrijving" Height="100"/>
+
+            <!-- Boodschappenlijst -->
+            <TextBlock Text="Boodschappenlijst:" FontWeight="Bold" Margin="10,0,0,10"/>
+            <ListBox ItemsSource="{Binding GeselecteerdEvenement.BoodschappenLijst}" DisplayMemberPath="Item" Height="100"/>
+
+            <!-- Shiftenlijst -->
+            <TextBlock Text="Shiftenlijst:" FontWeight="Bold" Margin="10,0,0,10"/>
+            <ListBox ItemsSource="{Binding GeselecteerdEvenement.ShiftenLijst}" DisplayMemberPath="ShiftOmschrijving" Height="100"/>
+        </StackPanel>
+
+        <!-- Knoppen voor interactie -->
+        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="10">
+            <!-- Knop voor nieuw evenement -->
+            <Button Content="Nieuw Evenement" 
+                    Width="120" 
+                    Height="30" 
+                    Command="{Binding NieuwEvenementCommand}" 
+                    Margin="0,0,10,0"/>
+
+            <!-- Knop voor evenement bewerken -->
+            <Button Content="Bewerk Evenement" 
+                    Width="120" 
+                    Height="30" 
+                    Command="{Binding BewerkEvenementCommand}" 
+                    Margin="0,0,10,0" 
+                    IsEnabled="{Binding IsEvenementGeselecteerd}"/>
+
+            <!-- Knop voor bekijken van details -->
+            <Button Content="Bekijk Details" 
+                    Width="120" 
+                    Height="30" 
+                    Command="{Binding BekijkDetailsCommand}" 
+                    Margin="0,0,10,0" 
+                    IsEnabled="{Binding IsEvenementGeselecteerd}"/>
+
+            <!-- Knoppen voor toevoegen van ToDo, Boodschappen en Shiften -->
+            <Button Content="Voeg ToDo Toe" Width="120" Height="30" Command="{Binding VoegToDoToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" />
+            <Button Content="Voeg Boodschap Toe" Width="120" Height="30" Command="{Binding VoegBoodschapToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" />
+            <Button Content="Voeg Shift Toe" Width="120" Height="30" Command="{Binding VoegShiftToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" />
+        </StackPanel>
+    </Grid>
+</Window>

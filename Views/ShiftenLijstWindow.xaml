@@ -1,0 +1,45 @@
+﻿<Window x:Class="EventManagerJH.Views.ShiftenLijstWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:EventManagerJH.Converters"
+        Title="Shiftenlijst" Height="400" Width="400">
+
+    <!-- Resources voor de converter -->
+    <Window.Resources>
+        <local:TextToVisibilityConverter x:Key="TextToVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <StackPanel>
+            <!-- Titel -->
+            <TextBlock Text="Shiftenlijst" FontWeight="Bold" FontSize="16" Margin="10"/>
+
+            <!-- ListBox voor de shiften -->
+            <ListBox ItemsSource="{Binding ShiftenLijst}" Height="200" Margin="10"/>
+
+            <!-- Shift omschrijving met TextBlock voor placeholder -->
+            <Grid Margin="10">
+                <TextBlock Text="Shift omschrijving" FontStyle="Italic" Foreground="Gray" IsHitTestVisible="False" 
+                           Visibility="{Binding Text.Length, ElementName=NieuweShiftTextBox, Converter={StaticResource TextToVisibilityConverter}}"/>
+                <TextBox x:Name="NieuweShiftTextBox" Width="300"/>
+            </Grid>
+
+            <!-- Starttijd met TextBlock voor placeholder -->
+            <Grid Margin="10">
+                <TextBlock Text="Starttijd (HH:mm)" FontStyle="Italic" Foreground="Gray" IsHitTestVisible="False" 
+                           Visibility="{Binding Text.Length, ElementName=StartTijdTextBox, Converter={StaticResource TextToVisibilityConverter}}"/>
+                <TextBox x:Name="StartTijdTextBox" Width="300"/>
+            </Grid>
+
+            <!-- Eindtijd met TextBlock voor placeholder -->
+            <Grid Margin="10">
+                <TextBlock Text="Eindtijd (HH:mm)" FontStyle="Italic" Foreground="Gray" IsHitTestVisible="False" 
+                           Visibility="{Binding Text.Length, ElementName=EindTijdTextBox, Converter={StaticResource TextToVisibilityConverter}}"/>
+                <TextBox x:Name="EindTijdTextBox" Width="300"/>
+            </Grid>
+
+            <!-- Knop om een nieuwe shift toe te voegen -->
+            <Button Content="Shift Toevoegen" Width="120" Margin="10" Click="ToevoegenButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

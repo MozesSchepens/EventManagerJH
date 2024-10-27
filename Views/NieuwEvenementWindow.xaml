@@ -1,0 +1,22 @@
+﻿<Window x:Class="EventManagerJH.Views.NieuwEvenementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nieuw Evenement" Height="300" Width="400">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Titel:" FontWeight="Bold"/>
+            <TextBox Name="TitelTextBox" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Locatie:" FontWeight="Bold"/>
+            <TextBox Name="LocatieTextBox" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Datum:" FontWeight="Bold"/>
+            <DatePicker Name="DatumPicker" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
+            <TextBox Name="BeschrijvingTextBox" TextWrapping="Wrap" Height="100" Margin="0,0,0,10"/>
+
+            <Button Content="Evenement Toevoegen" Width="150" HorizontalAlignment="Center" Click="ToevoegenButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

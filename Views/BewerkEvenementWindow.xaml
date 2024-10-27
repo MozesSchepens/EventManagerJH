@@ -1,0 +1,22 @@
+﻿<Window x:Class="EventManagerJH.Views.BewerkEvenementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bewerk Evenement" Height="300" Width="400">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Titel:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Titel}" />
+
+            <TextBlock Text="Datum:" FontWeight="Bold"/>
+            <DatePicker SelectedDate="{Binding Datum}" />
+
+            <TextBlock Text="Locatie:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Locatie}" />
+
+            <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Beschrijving}" AcceptsReturn="True" Height="100"/>
+
+            <Button Content="Opslaan" Width="100" Command="{Binding BewerkEvenementCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

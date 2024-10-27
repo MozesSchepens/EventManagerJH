@@ -33,9 +33,10 @@ namespace EventManagerJH.ViewModels
 
         public EvenementenViewModel()
         {
+            // Initialiseer EvenementenLijst met dummy data
             EvenementenLijst = new ObservableCollection<Evenement>
             {
-                new Evenement { EvenementID = 1, Titel = "Koerrock", Datum = new DateTime(2024, 09, 27), Locatie = "Jeugdhuis", Beschrijving = "Groot feest" },
+                new Evenement { EvenementID = 1, Titel = "Koerrock", Datum = new DateTime(2024, 9, 27), Locatie = "Jeugdhuis", Beschrijving = "Groot feest" },
                 new Evenement { EvenementID = 2, Titel = "Verjaardag Casi", Datum = new DateTime(2024, 12, 6), Locatie = "Binnen", Beschrijving = "Privé evenement" }
             };
 
@@ -60,7 +61,7 @@ namespace EventManagerJH.ViewModels
                 Beschrijving = "Beschrijving"
             };
             EvenementenLijst.Add(nieuwEvent);
-            OnPropertyChanged(nameof(EvenementenLijst));
+            GeselecteerdEvenement = nieuwEvent; // Selecteer het nieuw toegevoegde evenement
         }
 
         private void BewerkEvenement()

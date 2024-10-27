@@ -18,7 +18,6 @@ namespace EventManagerJH.Views
         {
             if (!string.IsNullOrWhiteSpace(NieuwToDoTextBox.Text))
             {
-                // Maak een nieuw TodoItem-object aan en voeg het toe aan de ToDoLijst
                 var nieuwToDo = new TodoItem
                 {
                     Beschrijving = NieuwToDoTextBox.Text
@@ -26,7 +25,6 @@ namespace EventManagerJH.Views
 
                 _evenement.ToDoLijst.Add(nieuwToDo);
 
-                // Wis de tekstbox na het toevoegen
                 NieuwToDoTextBox.Clear();
             }
         }

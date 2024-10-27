@@ -10,7 +10,6 @@ namespace EventManagerJH.Models
         public string Locatie { get; set; }
         public string Beschrijving { get; set; }
 
-        // ToDo-lijst, Boodschappenlijst en Shiftenlijst
         public ObservableCollection<TodoItem> ToDoLijst { get; set; }
         public ObservableCollection<Boodschap> BoodschappenLijst { get; set; }
         public ObservableCollection<Shift> ShiftenLijst { get; set; }
@@ -22,9 +21,4 @@ namespace EventManagerJH.Models
             ShiftenLijst = new ObservableCollection<Shift>();
         }
     }
-
-   
-    
-
-    
 }

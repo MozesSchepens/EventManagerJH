@@ -16,7 +16,6 @@ namespace EventManagerJH.Views
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
-            // Controleer of de velden zijn ingevuld en de tijdformaten correct zijn
             if (!string.IsNullOrWhiteSpace(ShiftOmschrijvingTextBox.Text) &&
                 DateTime.TryParse(StartTijdTextBox.Text, out DateTime startTijd) &&
                 DateTime.TryParse(EindTijdTextBox.Text, out DateTime eindTijd))

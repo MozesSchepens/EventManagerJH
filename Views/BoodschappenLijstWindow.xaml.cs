@@ -18,7 +18,6 @@ namespace EventManagerJH.Views
         {
             if (!string.IsNullOrWhiteSpace(NieuweBoodschapTextBox.Text))
             {
-                // Maak een nieuw Boodschap-object aan en voeg het toe aan de BoodschappenLijst
                 var nieuweBoodschap = new Boodschap
                 {
                     Item = NieuweBoodschapTextBox.Text
@@ -26,7 +25,6 @@ namespace EventManagerJH.Views
 
                 _evenement.BoodschappenLijst.Add(nieuweBoodschap);
 
-                // Wis de tekstbox na het toevoegen
                 NieuweBoodschapTextBox.Clear();
             }
         }

@@ -10,7 +10,7 @@ namespace EventManagerJH.Models
     {
         public int BoodschapID { get; set; }
         public string Item { get; set; }
-        public int EvenementID { get; set; } // Foreign key naar het evenement
+        public int EvenementID { get; set; } 
         public Evenement Evenement { get; set; }
     }
 }

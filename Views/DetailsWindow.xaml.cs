@@ -10,7 +10,7 @@ namespace EventManagerJH.Views
     {
         public DetailsWindow()
         {
-            InitializeComponent(); // Roep de automatisch gegenereerde methode aan
+            InitializeComponent();
         }
     }
 }

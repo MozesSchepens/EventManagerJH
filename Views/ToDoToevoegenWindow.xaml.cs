@@ -14,12 +14,12 @@ namespace EventManagerJH.Views
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
             Beschrijving = BeschrijvingTextBox.Text;
-            DialogResult = true; // Sluit de dialog af en geeft aan dat het succesvol is
+            DialogResult = true; 
         }
 
         private void Annuleren_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // Sluit de dialog af zonder te saven
+            DialogResult = false; 
         }
     }
 }

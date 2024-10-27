@@ -12,7 +12,7 @@ namespace EventManagerJH.Models
         public string ShiftOmschrijving { get; set; }
         public DateTime StartTijd { get; set; }
         public DateTime EindTijd { get; set; }
-        public int EvenementID { get; set; } // Foreign key naar het evenement
+        public int EvenementID { get; set; } 
         public Evenement Evenement { get; set; }
     }
 }

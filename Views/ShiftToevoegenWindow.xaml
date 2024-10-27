@@ -4,10 +4,8 @@
         xmlns:conv="clr-namespace:EventManagerJH.Converters"
         Title="Shift Toevoegen" Height="300" Width="400">
 
-    <!-- Resources sectie -->
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-        <!-- Overige stijlen en resources -->
     </Window.Resources>
 
     <Grid Margin="10">
@@ -22,7 +20,6 @@
         <TextBlock Text="Shift Omschrijving:" FontWeight="Bold" Margin="0,0,0,10"/>
         <Grid Grid.Row="1">
             <TextBox x:Name="ShiftOmschrijvingTextBox" Width="300" VerticalAlignment="Center" />
-            <!-- Alternatieve Placeholder implementatie -->
             <TextBlock Text="Voer shift omschrijving in..." 
                        Foreground="Gray" 
                        VerticalAlignment="Center" 
@@ -34,7 +31,6 @@
         <TextBlock Text="Start Tijd (HH:mm):" FontWeight="Bold" Margin="0,10,0,5" Grid.Row="2"/>
         <Grid Grid.Row="3">
             <TextBox x:Name="StartTijdTextBox" Width="300" VerticalAlignment="Center" />
-            <!-- Alternatieve Placeholder implementatie -->
             <TextBlock Text="Voer starttijd in (HH:mm)..." 
                        Foreground="Gray" 
                        VerticalAlignment="Center" 
@@ -46,7 +42,6 @@
         <TextBlock Text="Eind Tijd (HH:mm):" FontWeight="Bold" Margin="0,10,0,5" Grid.Row="4"/>
         <Grid Grid.Row="5">
             <TextBox x:Name="EindTijdTextBox" Width="300" VerticalAlignment="Center" />
-            <!-- Alternatieve Placeholder implementatie -->
             <TextBlock Text="Voer eindtijd in (HH:mm)..." 
                        Foreground="Gray" 
                        VerticalAlignment="Center" 

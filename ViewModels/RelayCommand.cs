@@ -24,7 +24,6 @@ namespace EventManagerJH.ViewModels
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        // Handmatige methode om de CanExecute-status te updaten
         public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

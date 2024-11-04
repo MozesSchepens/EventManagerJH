@@ -32,6 +32,18 @@ namespace EventManagerJH.ViewModels
             }
         }
 
+        private string _zoekTerm;
+        public string ZoekTerm
+        {
+            get => _zoekTerm;
+            set
+            {
+                _zoekTerm = value;
+                OnPropertyChanged(nameof(ZoekTerm));
+                FilterEvenementen(); // Filter evenementen zodra de zoekterm wordt bijgewerkt
+            }
+        }
+
         public ICommand NieuwEvenementCommand { get; }
         public ICommand BewerkEvenementCommand { get; }
         public ICommand BekijkDetailsCommand { get; }
@@ -67,6 +79,30 @@ namespace EventManagerJH.ViewModels
         }
 
         public bool IsEvenementGeselecteerd => GeselecteerdEvenement != null;
+
+        private void FilterEvenementen()
+        {
+            if (string.IsNullOrWhiteSpace(ZoekTerm))
+            {
+                GeselecteerdEvenement = EvenementenLijst.FirstOrDefault();
+            }
+            else
+            {
+                var gefilterdeEvenementen = EvenementenLijst
+                    .Where(e => e.Titel.Contains(ZoekTerm, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (gefilterdeEvenementen.Any())
+                {
+                    GeselecteerdEvenement = gefilterdeEvenementen.First();
+                }
+                else
+                {
+                    GeselecteerdEvenement = null;
+                }
+            }
+            OnPropertyChanged(nameof(GeselecteerdEvenement));
+        }
 
         private void UpdateLijsten()
         {
@@ -114,6 +150,7 @@ namespace EventManagerJH.ViewModels
                 EvenementenLijst.Add(nieuwEvent);
                 _context.Evenementen.Add(nieuwEvent);
                 _context.SaveChanges();
+                GeselecteerdEvenement = nieuwEvent;
                 OnPropertyChanged(nameof(EvenementenLijst));
             }
             catch (Exception ex)

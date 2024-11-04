@@ -1,60 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using EventManagerJH.Data;
 using EventManagerJH.Views;
 using EventManagerJH.ViewModels;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace EventManagerJH
 {
     public partial class App : Application
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
+        private IHost _host;
 
-        protected override void OnStartup(StartupEventArgs e)
+        public App()
         {
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-
-            ServiceProvider = serviceCollection.BuildServiceProvider();
-
-            try
-            {
-                using (var scope = ServiceProvider.CreateScope())
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                    dbContext.Database.Migrate();  // Zorg ervoor dat migraties worden toegepast
-                }
+                    services.AddDbContext<AppDbContext>(options =>
+                        options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
 
-                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-                mainWindow.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Er is een fout opgetreden bij het opstarten: {ex.Message}", "Startup Fout", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
+                    services.AddTransient<MainWindow>();
+                    services.AddTransient<EvenementenViewModel>();
+                })
+                .Build();
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            await _host.StartAsync();
+
+            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
 
             base.OnStartup(e);
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        protected override async void OnExit(ExitEventArgs e)
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EventManagerDB;Integrated Security=True;"));
-
-            services.AddSingleton<EvenementenViewModel>();
-            services.AddSingleton<MainWindow>();
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            if (ServiceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-
+            await _host.StopAsync();
             base.OnExit(e);
         }
     }

@@ -1,10 +1,11 @@
-﻿using System.Windows;
+﻿using EventManagerJH.Models;
+using System.Windows;
 
 namespace EventManagerJH.Views
 {
     public partial class BoodschapToevoegenWindow : Window
     {
-        public string Item { get; private set; }
+        public string Boodschap { get; private set; }
 
         public BoodschapToevoegenWindow()
         {
@@ -13,8 +14,9 @@ namespace EventManagerJH.Views
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
-            Item = BoodschapTextBox.Text;
+            Boodschap = BoodschapTextBox.Text;
             DialogResult = true;
+            Close();
         }
 
         private void Annuleren_Click(object sender, RoutedEventArgs e)

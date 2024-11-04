@@ -1,23 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using EventManagerJH.Models;
+using System;
 
 namespace EventManagerJH.Data
 {
     public class AppDbContext : DbContext
     {
         public DbSet<Evenement> Evenementen { get; set; }
-        public DbSet<TodoItem> TodoItems { get; set; }
-        public DbSet<Shift> Shiften { get; set; }
+        public DbSet<TodoItem> ToDoItems { get; set; }
         public DbSet<Boodschap> Boodschappen { get; set; }
+        public DbSet<Shift> Shiften { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EventManagerDB;Trusted_Connection=True;");
+            base.OnModelCreating(modelBuilder);
+
+            // Seed data voor testdoeleinden
+            modelBuilder.Entity<Evenement>().HasData(
+                new Evenement
+                {
+                    EvenementID = 1,
+                    Titel = "Koerrock",
+                    Datum = new DateTime(2024, 9, 27),
+                    Locatie = "Jeugdhuis",
+                    Beschrijving = "Groot feest"
+                },
+                new Evenement
+                {
+                    EvenementID = 2,
+                    Titel = "Verjaardag Casi",
+                    Datum = new DateTime(2024, 12, 6),
+                    Locatie = "Binnen",
+                    Beschrijving = "Privé evenement"
+                }
+            );
         }
     }
 }

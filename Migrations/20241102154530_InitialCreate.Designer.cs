@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagerJH.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241025154336_InitialCreate")]
+    [Migration("20241102154530_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,10 +59,6 @@ namespace EventManagerJH.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BoodschappenLijst")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Datum")
                         .HasColumnType("datetime2");
 
@@ -70,21 +66,31 @@ namespace EventManagerJH.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShiftenLijst")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Titel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToDoLijst")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EvenementID");
 
                     b.ToTable("Evenementen");
+
+                    b.HasData(
+                        new
+                        {
+                            EvenementID = 1,
+                            Beschrijving = "Groot feest",
+                            Datum = new DateTime(2024, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Locatie = "Jeugdhuis",
+                            Titel = "Koerrock"
+                        },
+                        new
+                        {
+                            EvenementID = 2,
+                            Beschrijving = "Privé evenement",
+                            Datum = new DateTime(2024, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Locatie = "Binnen",
+                            Titel = "Verjaardag Casi"
+                        });
                 });
 
             modelBuilder.Entity("EventManagerJH.Models.Shift", b =>
@@ -134,13 +140,13 @@ namespace EventManagerJH.Migrations
 
                     b.HasIndex("EvenementID");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("ToDoItems");
                 });
 
             modelBuilder.Entity("EventManagerJH.Models.Boodschap", b =>
                 {
                     b.HasOne("EventManagerJH.Models.Evenement", "Evenement")
-                        .WithMany()
+                        .WithMany("BoodschappenLijst")
                         .HasForeignKey("EvenementID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -151,7 +157,7 @@ namespace EventManagerJH.Migrations
             modelBuilder.Entity("EventManagerJH.Models.Shift", b =>
                 {
                     b.HasOne("EventManagerJH.Models.Evenement", "Evenement")
-                        .WithMany()
+                        .WithMany("ShiftenLijst")
                         .HasForeignKey("EvenementID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -162,12 +168,21 @@ namespace EventManagerJH.Migrations
             modelBuilder.Entity("EventManagerJH.Models.TodoItem", b =>
                 {
                     b.HasOne("EventManagerJH.Models.Evenement", "Evenement")
-                        .WithMany()
+                        .WithMany("ToDoLijst")
                         .HasForeignKey("EvenementID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Evenement");
+                });
+
+            modelBuilder.Entity("EventManagerJH.Models.Evenement", b =>
+                {
+                    b.Navigation("BoodschappenLijst");
+
+                    b.Navigation("ShiftenLijst");
+
+                    b.Navigation("ToDoLijst");
                 });
 #pragma warning restore 612, 618
         }

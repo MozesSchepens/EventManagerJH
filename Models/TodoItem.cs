@@ -10,6 +10,7 @@ namespace EventManagerJH.Models
     {
         public int TodoItemID { get; set; }
         public string Beschrijving { get; set; }
+        public bool IsVoltooid { get; set; }
         public int EvenementID { get; set; } 
         public Evenement Evenement { get; set; }
     }

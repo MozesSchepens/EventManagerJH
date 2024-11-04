@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EventManagerJH.Migrations
 {
     /// <inheritdoc />
@@ -20,10 +22,7 @@ namespace EventManagerJH.Migrations
                     Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Datum = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Locatie = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beschrijving = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ToDoLijst = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BoodschappenLijst = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShiftenLijst = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Beschrijving = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,7 +72,7 @@ namespace EventManagerJH.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TodoItems",
+                name: "ToDoItems",
                 columns: table => new
                 {
                     TodoItemID = table.Column<int>(type: "int", nullable: false)
@@ -83,13 +82,22 @@ namespace EventManagerJH.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TodoItems", x => x.TodoItemID);
+                    table.PrimaryKey("PK_ToDoItems", x => x.TodoItemID);
                     table.ForeignKey(
-                        name: "FK_TodoItems_Evenementen_EvenementID",
+                        name: "FK_ToDoItems_Evenementen_EvenementID",
                         column: x => x.EvenementID,
                         principalTable: "Evenementen",
                         principalColumn: "EvenementID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Evenementen",
+                columns: new[] { "EvenementID", "Beschrijving", "Datum", "Locatie", "Titel" },
+                values: new object[,]
+                {
+                    { 1, "Groot feest", new DateTime(2024, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jeugdhuis", "Koerrock" },
+                    { 2, "Privé evenement", new DateTime(2024, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "Binnen", "Verjaardag Casi" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -103,8 +111,8 @@ namespace EventManagerJH.Migrations
                 column: "EvenementID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TodoItems_EvenementID",
-                table: "TodoItems",
+                name: "IX_ToDoItems_EvenementID",
+                table: "ToDoItems",
                 column: "EvenementID");
         }
 
@@ -118,7 +126,7 @@ namespace EventManagerJH.Migrations
                 name: "Shiften");
 
             migrationBuilder.DropTable(
-                name: "TodoItems");
+                name: "ToDoItems");
 
             migrationBuilder.DropTable(
                 name: "Evenementen");

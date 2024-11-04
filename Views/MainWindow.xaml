@@ -29,24 +29,26 @@
                  VerticalAlignment="Top" 
                  Margin="0,0,10,0" />
 
-        <!-- Details sectie -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
-            <TextBlock Text="Titel:" FontWeight="Bold"/>
-            <TextBlock Text="{Binding GeselecteerdEvenement.Titel}" Margin="0,0,0,10"/>
+        <!-- TabControl voor Details, ToDo-lijst, Shiftenlijst, en Boodschappenlijst -->
+        <TabControl Grid.Row="1" Grid.Column="1">
+            <!-- Details Tab -->
+            <TabItem Header="Details">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Titel:" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding GeselecteerdEvenement.Titel}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Datum:" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding GeselecteerdEvenement.Datum, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Locatie:" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding GeselecteerdEvenement.Locatie}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding GeselecteerdEvenement.Beschrijving}" Margin="0,0,0,10"/>
+                </StackPanel>
+            </TabItem>
 
-            <TextBlock Text="Datum:" FontWeight="Bold"/>
-            <TextBlock Text="{Binding GeselecteerdEvenement.Datum, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="0,0,0,10"/>
-
-            <TextBlock Text="Locatie:" FontWeight="Bold"/>
-            <TextBlock Text="{Binding GeselecteerdEvenement.Locatie}" Margin="0,0,0,10"/>
-
-            <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
-            <TextBlock TextWrapping="Wrap" Text="{Binding GeselecteerdEvenement.Beschrijving}" Margin="0,0,0,10"/>
-
-            <!-- ToDo-lijst in een GroupBox -->
-            <GroupBox Header="ToDo-lijst" Margin="0,10,0,10">
-                <StackPanel>
-                    <ListBox ItemsSource="{Binding GeselecteerdeToDoLijst}" Height="100">
+            <!-- ToDo-lijst Tab -->
+            <TabItem Header="ToDo-lijst">
+                <StackPanel Margin="10">
+                    <ListBox ItemsSource="{Binding GeselecteerdeToDoLijst}" Height="150">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -59,12 +61,12 @@
                     </ListBox>
                     <Button Content="Voeg ToDo Toe" Command="{Binding VoegToDoToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
                 </StackPanel>
-            </GroupBox>
+            </TabItem>
 
-            <!-- Shiftenlijst in een GroupBox -->
-            <GroupBox Header="Shiftenlijst" Margin="0,10,0,10">
-                <StackPanel>
-                    <ListBox ItemsSource="{Binding GeselecteerdeShiftenLijst}" Height="100">
+            <!-- Shiftenlijst Tab -->
+            <TabItem Header="Shiftenlijst">
+                <StackPanel Margin="10">
+                    <ListBox ItemsSource="{Binding GeselecteerdeShiftenLijst}" Height="150">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -79,16 +81,16 @@
                     </ListBox>
                     <Button Content="Voeg Shift Toe" Command="{Binding VoegShiftToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
                 </StackPanel>
-            </GroupBox>
+            </TabItem>
 
-            <!-- Boodschappenlijst in een GroupBox -->
-            <GroupBox Header="Boodschappenlijst" Margin="0,10,0,10">
-                <StackPanel>
-                    <ListBox ItemsSource="{Binding GeselecteerdeBoodschappenLijst}" DisplayMemberPath="Item" Height="100"/>
+            <!-- Boodschappenlijst Tab -->
+            <TabItem Header="Boodschappenlijst">
+                <StackPanel Margin="10">
+                    <ListBox ItemsSource="{Binding GeselecteerdeBoodschappenLijst}" DisplayMemberPath="Item" Height="150"/>
                     <Button Content="Voeg Boodschap Toe" Command="{Binding VoegBoodschapToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
                 </StackPanel>
-            </GroupBox>
-        </StackPanel>
+            </TabItem>
+        </TabControl>
 
         <!-- Actieknoppen sectie onderaan -->
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">

@@ -54,139 +54,195 @@ namespace EventManagerJH.ViewModels
 
         private void LoadEvenementen()
         {
-            var evenementen = _context.Evenementen.ToList();
-            EvenementenLijst = new ObservableCollection<Evenement>(evenementen);
-            OnPropertyChanged(nameof(EvenementenLijst));
+            try
+            {
+                var evenementen = _context.Evenementen.ToList();
+                EvenementenLijst = new ObservableCollection<Evenement>(evenementen);
+                OnPropertyChanged(nameof(EvenementenLijst));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het laden van evenementen: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public bool IsEvenementGeselecteerd => GeselecteerdEvenement != null;
 
         private void UpdateLijsten()
         {
-            if (GeselecteerdEvenement != null)
+            try
             {
-                GeselecteerdeToDoLijst = new ObservableCollection<TodoItem>(
-                    _context.ToDoItems.Where(t => t.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
+                if (GeselecteerdEvenement != null)
+                {
+                    GeselecteerdeToDoLijst = new ObservableCollection<TodoItem>(
+                        _context.ToDoItems.Where(t => t.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
 
-                GeselecteerdeShiftenLijst = new ObservableCollection<Shift>(
-                    _context.Shiften.Where(s => s.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
+                    GeselecteerdeShiftenLijst = new ObservableCollection<Shift>(
+                        _context.Shiften.Where(s => s.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
 
-                GeselecteerdeBoodschappenLijst = new ObservableCollection<Boodschap>(
-                    _context.Boodschappen.Where(b => b.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
+                    GeselecteerdeBoodschappenLijst = new ObservableCollection<Boodschap>(
+                        _context.Boodschappen.Where(b => b.EvenementID == GeselecteerdEvenement.EvenementID).ToList());
+                }
+                else
+                {
+                    GeselecteerdeToDoLijst = new ObservableCollection<TodoItem>();
+                    GeselecteerdeShiftenLijst = new ObservableCollection<Shift>();
+                    GeselecteerdeBoodschappenLijst = new ObservableCollection<Boodschap>();
+                }
+
+                OnPropertyChanged(nameof(GeselecteerdeToDoLijst));
+                OnPropertyChanged(nameof(GeselecteerdeShiftenLijst));
+                OnPropertyChanged(nameof(GeselecteerdeBoodschappenLijst));
             }
-            else
+            catch (Exception ex)
             {
-                GeselecteerdeToDoLijst = new ObservableCollection<TodoItem>();
-                GeselecteerdeShiftenLijst = new ObservableCollection<Shift>();
-                GeselecteerdeBoodschappenLijst = new ObservableCollection<Boodschap>();
+                MessageBox.Show($"Er is een fout opgetreden bij het bijwerken van de lijsten: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            OnPropertyChanged(nameof(GeselecteerdeToDoLijst));
-            OnPropertyChanged(nameof(GeselecteerdeShiftenLijst));
-            OnPropertyChanged(nameof(GeselecteerdeBoodschappenLijst));
         }
 
         private void NieuwEvenement()
         {
-            var nieuwEvent = new Evenement
+            try
             {
-                Titel = "Nieuw Evenement",
-                Datum = DateTime.Now,
-                Locatie = "Nieuwe locatie",
-                Beschrijving = "Beschrijving"
-            };
-            EvenementenLijst.Add(nieuwEvent);
-            _context.Evenementen.Add(nieuwEvent);
-            _context.SaveChanges();
-            OnPropertyChanged(nameof(EvenementenLijst));
+                var nieuwEvent = new Evenement
+                {
+                    Titel = "Nieuw Evenement",
+                    Datum = DateTime.Now,
+                    Locatie = "Nieuwe locatie",
+                    Beschrijving = "Beschrijving"
+                };
+                EvenementenLijst.Add(nieuwEvent);
+                _context.Evenementen.Add(nieuwEvent);
+                _context.SaveChanges();
+                OnPropertyChanged(nameof(EvenementenLijst));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het aanmaken van een nieuw evenement: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BewerkEvenement()
         {
-            if (GeselecteerdEvenement == null) return;
-
-            var bewerkWindow = new BewerkEvenementWindow(GeselecteerdEvenement);
-            if (bewerkWindow.ShowDialog() == true)
+            try
             {
-                _context.Evenementen.Update(GeselecteerdEvenement);
-                _context.SaveChanges();
-                OnPropertyChanged(nameof(EvenementenLijst));
+                if (GeselecteerdEvenement == null) return;
 
-                MessageBox.Show($"Evenement '{GeselecteerdEvenement.Titel}' is bijgewerkt.",
-                                "Evenement Bewerken", MessageBoxButton.OK, MessageBoxImage.Information);
+                var bewerkWindow = new BewerkEvenementWindow(GeselecteerdEvenement);
+                if (bewerkWindow.ShowDialog() == true)
+                {
+                    _context.Evenementen.Update(GeselecteerdEvenement);
+                    _context.SaveChanges();
+                    OnPropertyChanged(nameof(EvenementenLijst));
+
+                    MessageBox.Show($"Evenement '{GeselecteerdEvenement.Titel}' is bijgewerkt.",
+                                    "Evenement Bewerken", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het bewerken van het evenement: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void VoegToDoToe()
         {
-            if (GeselecteerdEvenement == null) return;
-
-            var addTodoWindow = new ToDoToevoegenWindow();
-            if (addTodoWindow.ShowDialog() == true)
+            try
             {
-                var nieuwToDo = new TodoItem
+                if (GeselecteerdEvenement == null) return;
+
+                var addTodoWindow = new ToDoToevoegenWindow();
+                if (addTodoWindow.ShowDialog() == true)
                 {
-                    Beschrijving = addTodoWindow.Beschrijving,
-                    IsVoltooid = false,
-                    EvenementID = GeselecteerdEvenement.EvenementID
-                };
-                _context.ToDoItems.Add(nieuwToDo);
-                _context.SaveChanges();
-                GeselecteerdeToDoLijst.Add(nieuwToDo);
-                OnPropertyChanged(nameof(GeselecteerdeToDoLijst));
+                    var nieuwToDo = new TodoItem
+                    {
+                        Beschrijving = addTodoWindow.Beschrijving,
+                        IsVoltooid = false,
+                        EvenementID = GeselecteerdEvenement.EvenementID
+                    };
+                    _context.ToDoItems.Add(nieuwToDo);
+                    _context.SaveChanges();
+                    GeselecteerdeToDoLijst.Add(nieuwToDo);
+                    OnPropertyChanged(nameof(GeselecteerdeToDoLijst));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het toevoegen van een ToDo-item: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void VoegShiftToe()
         {
-            if (GeselecteerdEvenement == null) return;
-
-            var addShiftWindow = new ShiftToevoegenWindow();
-            if (addShiftWindow.ShowDialog() == true)
+            try
             {
-                var nieuweShift = new Shift
+                if (GeselecteerdEvenement == null) return;
+
+                var addShiftWindow = new ShiftToevoegenWindow();
+                if (addShiftWindow.ShowDialog() == true)
                 {
-                    ShiftOmschrijving = addShiftWindow.ShiftOmschrijving,
-                    StartTijd = addShiftWindow.StartTijd,
-                    EindTijd = addShiftWindow.EindTijd,
-                    EvenementID = GeselecteerdEvenement.EvenementID
-                };
-                _context.Shiften.Add(nieuweShift);
-                _context.SaveChanges();
-                GeselecteerdeShiftenLijst.Add(nieuweShift);
-                OnPropertyChanged(nameof(GeselecteerdeShiftenLijst));
+                    var nieuweShift = new Shift
+                    {
+                        ShiftOmschrijving = addShiftWindow.ShiftOmschrijving,
+                        StartTijd = addShiftWindow.StartTijd,
+                        EindTijd = addShiftWindow.EindTijd,
+                        EvenementID = GeselecteerdEvenement.EvenementID
+                    };
+                    _context.Shiften.Add(nieuweShift);
+                    _context.SaveChanges();
+                    GeselecteerdeShiftenLijst.Add(nieuweShift);
+                    OnPropertyChanged(nameof(GeselecteerdeShiftenLijst));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het toevoegen van een shift: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void VoegBoodschapToe()
         {
-            if (GeselecteerdEvenement == null) return;
-
-            var addBoodschapWindow = new BoodschapToevoegenWindow();
-            if (addBoodschapWindow.ShowDialog() == true)
+            try
             {
-                var nieuweBoodschap = new Boodschap
+                if (GeselecteerdEvenement == null) return;
+
+                var addBoodschapWindow = new BoodschapToevoegenWindow();
+                if (addBoodschapWindow.ShowDialog() == true)
                 {
-                    Item = addBoodschapWindow.Boodschap,
-                    EvenementID = GeselecteerdEvenement.EvenementID
-                };
-                _context.Boodschappen.Add(nieuweBoodschap);
-                _context.SaveChanges();
-                GeselecteerdeBoodschappenLijst.Add(nieuweBoodschap);
-                OnPropertyChanged(nameof(GeselecteerdeBoodschappenLijst));
+                    var nieuweBoodschap = new Boodschap
+                    {
+                        Item = addBoodschapWindow.Boodschap,
+                        EvenementID = GeselecteerdEvenement.EvenementID
+                    };
+                    _context.Boodschappen.Add(nieuweBoodschap);
+                    _context.SaveChanges();
+                    GeselecteerdeBoodschappenLijst.Add(nieuweBoodschap);
+                    OnPropertyChanged(nameof(GeselecteerdeBoodschappenLijst));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het toevoegen van een boodschap: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void BekijkDetails()
         {
-            if (GeselecteerdEvenement == null) return;
+            try
+            {
+                if (GeselecteerdEvenement == null) return;
 
-            string details = $"Titel: {GeselecteerdEvenement.Titel}\n" +
-                             $"Datum: {GeselecteerdEvenement.Datum:dd/MM/yyyy}\n" +
-                             $"Locatie: {GeselecteerdEvenement.Locatie}\n" +
-                             $"Beschrijving: {GeselecteerdEvenement.Beschrijving}";
+                string details = $"Titel: {GeselecteerdEvenement.Titel}\n" +
+                                 $"Datum: {GeselecteerdEvenement.Datum:dd/MM/yyyy}\n" +
+                                 $"Locatie: {GeselecteerdEvenement.Locatie}\n" +
+                                 $"Beschrijving: {GeselecteerdEvenement.Beschrijving}";
 
-            MessageBox.Show(details, "Evenement Details", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(details, "Evenement Details", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Er is een fout opgetreden bij het bekijken van de details: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

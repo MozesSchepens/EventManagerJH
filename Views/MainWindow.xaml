@@ -1,7 +1,45 @@
 ﻿<Window x:Class="EventManagerJH.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Evenementen Beheer Systeem" Height="600" Width="900">
+        xmlns:vm="clr-namespace:EventManagerJH.ViewModels"
+        Title="Evenementen Beheer Systeem" Height="600" Width="1000"
+        Background="#800000">
+    <!-- Bordeaux achtergrond -->
+
+    <Window.Resources>
+        <!-- Globale stijlen voor consistentie -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFB366"/>
+            <!-- Okergele kleur -->
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="#FFB366"/>
+            <!-- Okergele tekst op knoppen -->
+            <Setter Property="Background" Value="#400000"/>
+            <!-- Donker bordeaux voor knoppen -->
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="#FFB366"/>
+            <Setter Property="Background" Value="#4D0000"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="Foreground" Value="#FFB366"/>
+            <Setter Property="Background" Value="#4D0000"/>
+            <Setter Property="BorderBrush" Value="#800000"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="#FFB366"/>
+            <Setter Property="Background" Value="#4D0000"/>
+            <Setter Property="BorderBrush" Value="#800000"/>
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="#4D0000"/>
+            <Setter Property="BorderBrush" Value="#800000"/>
+        </Style>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -9,94 +47,80 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Zoeken sectie -->
+        <!-- Zoekveld -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
             <TextBlock Text="Zoeken:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <TextBox Width="200" />
+            <TextBox Width="200" Text="{Binding ZoekTerm, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <!-- Evenementen lijst -->
-        <ListBox Grid.Row="1" Grid.Column="0" 
-                 ItemsSource="{Binding EvenementenLijst}" 
+        <!-- Lijst van evenementen -->
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding EvenementenLijst}" 
                  DisplayMemberPath="Titel" 
                  SelectedItem="{Binding GeselecteerdEvenement, Mode=TwoWay}" 
                  HorizontalAlignment="Stretch" 
-                 VerticalAlignment="Top" 
-                 Margin="0,0,10,0" />
+                 VerticalAlignment="Stretch" 
+                 Margin="0,0,10,0"/>
 
-        <!-- TabControl voor Details, ToDo-lijst, Shiftenlijst, en Boodschappenlijst -->
-        <TabControl Grid.Row="1" Grid.Column="1">
-            <!-- Details Tab -->
-            <TabItem Header="Details">
-                <StackPanel Margin="10">
-                    <TextBlock Text="Titel:" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding GeselecteerdEvenement.Titel}" Margin="0,0,0,10"/>
-                    <TextBlock Text="Datum:" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding GeselecteerdEvenement.Datum, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="0,0,0,10"/>
-                    <TextBlock Text="Locatie:" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding GeselecteerdEvenement.Locatie}" Margin="0,0,0,10"/>
-                    <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
-                    <TextBlock TextWrapping="Wrap" Text="{Binding GeselecteerdEvenement.Beschrijving}" Margin="0,0,0,10"/>
-                </StackPanel>
-            </TabItem>
+        <!-- Evenement details -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,10,0">
+            <TextBlock Text="Evenement Details" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+            <TextBlock Text="Titel:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Titel}" Margin="0,0,0,10"/>
+            <TextBlock Text="Datum:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Datum, StringFormat='{}{0:dd/MM/yyyy}'}" Margin="0,0,0,10"/>
+            <TextBlock Text="Locatie:" FontWeight="Bold"/>
+            <TextBlock Text="{Binding GeselecteerdEvenement.Locatie}" Margin="0,0,0,10"/>
+            <TextBlock Text="Beschrijving:" FontWeight="Bold"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding GeselecteerdEvenement.Beschrijving}" Margin="0,0,0,10"/>
+        </StackPanel>
 
-            <!-- ToDo-lijst Tab -->
+        <!-- ToDo, Shiften en Boodschappen lijsten met knoppen -->
+        <TabControl Grid.Row="1" Grid.Column="2" Margin="10,0,0,0">
+            <!-- ToDo-lijst -->
             <TabItem Header="ToDo-lijst">
-                <StackPanel Margin="10">
-                    <ListBox ItemsSource="{Binding GeselecteerdeToDoLijst}" Height="150">
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding GeselecteerdeToDoLijst}" Height="200" Margin="0,5">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <CheckBox IsChecked="{Binding IsVoltooid}">
-                                        <TextBlock Text="{Binding Beschrijving}" />
-                                    </CheckBox>
-                                </StackPanel>
+                                <CheckBox Content="{Binding Beschrijving}" IsChecked="{Binding IsVoltooid}" Foreground="#FFB366"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="Voeg ToDo Toe" Command="{Binding VoegToDoToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
+                    <Button Content="Voeg ToDo Toe" Command="{Binding VoegToDoToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="0,5"/>
                 </StackPanel>
             </TabItem>
 
-            <!-- Shiftenlijst Tab -->
+            <!-- Shiftenlijst -->
             <TabItem Header="Shiftenlijst">
-                <StackPanel Margin="10">
-                    <ListBox ItemsSource="{Binding GeselecteerdeShiftenLijst}" Height="150">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding ShiftOmschrijving}" FontWeight="Bold"/>
-                                    <TextBlock Text=" | " />
-                                    <TextBlock Text="{Binding StartTijd, StringFormat='{}{0:HH:mm}'}"/>
-                                    <TextBlock Text=" - " />
-                                    <TextBlock Text="{Binding EindTijd, StringFormat='{}{0:HH:mm}'}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <Button Content="Voeg Shift Toe" Command="{Binding VoegShiftToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding GeselecteerdeShiftenLijst}" DisplayMemberPath="ShiftOmschrijving" Height="200" Margin="0,5"/>
+                    <Button Content="Voeg Shift Toe" Command="{Binding VoegShiftToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="0,5"/>
                 </StackPanel>
             </TabItem>
 
-            <!-- Boodschappenlijst Tab -->
+            <!-- Boodschappenlijst -->
             <TabItem Header="Boodschappenlijst">
-                <StackPanel Margin="10">
-                    <ListBox ItemsSource="{Binding GeselecteerdeBoodschappenLijst}" DisplayMemberPath="Item" Height="150"/>
-                    <Button Content="Voeg Boodschap Toe" Command="{Binding VoegBoodschapToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="5"/>
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding GeselecteerdeBoodschappenLijst}" DisplayMemberPath="Item" Height="200" Margin="0,5"/>
+                    <Button Content="Voeg Boodschap Toe" Command="{Binding VoegBoodschapToeCommand}" IsEnabled="{Binding IsEvenementGeselecteerd}" Margin="0,5"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
 
-        <!-- Actieknoppen sectie onderaan -->
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
-            <Button Content="Nieuw Evenement" Width="120" Command="{Binding NieuwEvenementCommand}" Margin="0,0,10,0"/>
-            <Button Content="Bewerk Evenement" Width="120" Command="{Binding BewerkEvenementCommand}" Margin="0,0,10,0" IsEnabled="{Binding IsEvenementGeselecteerd}"/>
-            <Button Content="Bekijk Details" Width="120" Command="{Binding BekijkDetailsCommand}" Margin="0,0,10,0" IsEnabled="{Binding IsEvenementGeselecteerd}"/>
+        <!-- Actieknoppen onderaan naast elkaar -->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0">
+            <Button Content="Nieuw Evenement" Command="{Binding NieuwEvenementCommand}" Width="150" Margin="5"/>
+            <Button Content="Bewerk Evenement" Command="{Binding BewerkEvenementCommand}" Width="150" Margin="5" 
+                    IsEnabled="{Binding IsEvenementGeselecteerd}"/>
+            <Button Content="Bekijk Details" Command="{Binding BekijkDetailsCommand}" Width="150" Margin="5" 
+                    IsEnabled="{Binding IsEvenementGeselecteerd}"/>
         </StackPanel>
     </Grid>
 </Window>

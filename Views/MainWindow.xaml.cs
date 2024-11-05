@@ -1,14 +1,17 @@
 ﻿using System.Windows;
 using EventManagerJH.ViewModels;
+using EventManagerJH.Data;
 
 namespace EventManagerJH.Views
 {
     public partial class MainWindow : Window
     {
-        public MainWindow(EvenementenViewModel viewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = viewModel;
+
+            var dbContext = new AppDbContext(); 
+            this.DataContext = new EvenementenViewModel(dbContext);
         }
     }
 }
